@@ -1,0 +1,37 @@
+#netty info
+netty:
+ hostIp: 0.0.0.0
+ port: 6000
+ bossThread: 1
+ workThread: 2
+ timeout: 6000
+
+#spring boot port
+server:
+ port : 6001
+
+#log 
+logging:
+ level.org.springframework.boot.autoconfigure: error #spring的自动装配日志只打error，否则debug输出的会打印很多自动装配的log信息到控制台
+ config: classpath:logback-spring.xml
+
+#DataBse
+datasource:
+ txn:
+  dataSourceClassName: oracle.jdbc.driver.OracleDriver
+  url: jdbc:oracle:thin:@10.10.10.35:1521:HAGO
+  username: HGCLM_ONLINES 
+  password: HGCLM_ONLINES
+ txnio:
+  dataSourceClassName: oracle.jdbc.driver.OracleDriver
+  url: jdbc:oracle:thin:@10.10.10.35:1521:HAGO
+  username: HGCLM_ONLINES 
+  password: HGCLM_ONLINES
+ hikari:
+  connection-test-query: SELECT 1 FROM DUAL
+  poolName: txn
+  maximum-pool-size: 1
+  minimum-idle: 1
+  connection-timeout: 50000
+ 
+  
