@@ -1,0 +1,99 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'java'
+	id 'war'
+	id "com.palantir.docker" version "0.22.1"
+	//id "com.palantir.docker-run" version "0.22.1"
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.palantir.docker"
+
+group = 'bbsWs'
+version = '1.0'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+
+war {
+	archiveName = "bbsWs.war"
+	manifest {
+        attributes("Implementation-Vendor": 'Hyweb Global Technology Co., Ltd.',
+                   "Implementation-Title": 'Open Point Payment Gateway',
+                   "Implementation-Version": version,
+                   'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
+    }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'	
+	implementation group: 'io.netty', name: 'netty-all', version: '4.1.59.Final'
+    implementation group: 'org.jpos', name: 'jpos', version: '2.1.8'
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '4.0.3'
+	//implementation group: 'com.microsoft.sqlserver', name: 'sqljdbc42', version: '6.0.8112'
+	// https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
+	// https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
+	// https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8
+	implementation group: 'com.oracle.ojdbc', name: 'ojdbc8', version: '19.3.0.0'
+	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '12.4.0.jre8'	
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.7.5'
+	compileOnly 'org.projectlombok:lombok:1.18.8'
+	annotationProcessor 'org.projectlombok:lombok:1.18.8'
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+bootJar {
+	archiveName = "bbsWs.jar"
+    launchScript()
+}
+
+jar {
+	archiveName = "bbsWs.jar"
+	manifest {
+        attributes("Main-Class": 'org.springframework.boot.loader.JarLauncher',
+        		   "Start-Class": 'bbsWs.Application',
+                   "Implementation-Vendor": 'Hyweb Global Technology Co., Ltd.',
+                   "Implementation-Title": 'bocker',
+                   "Implementation-Version": version,
+                   'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
+    }
+}
+
+/*
+task createDockerFile(type: Dockerfile) {
+    from 'openjdk:8-jre-alpine'
+    copyFile jar.archiveFileName.get(), '/app/bbsWs.jar'
+    entryPoint 'java'
+    defaultCommand '-jar', '/app/bbsWs.jar'
+    exposePort 8080
+}
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn createDockerFile, syncJar
+    inputDir = createDockerFile.getDestDir()
+    images = ["bbsWs/1.0"]
+}
+
+
+dockerRun {
+    //name "${project.name}"
+    name 'bbsWsServer'
+    //image "${project.name}:${project.version}"
+    images 'bbsWs/1.0'
+    ports '8080:8080'
+    clean true
+}
+*/
