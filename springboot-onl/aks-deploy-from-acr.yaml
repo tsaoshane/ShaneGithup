@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: my-shane-deployment
 spec:
-  replicas: 3
+  replicas: 1
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: shane-app
@@ -17,8 +19,28 @@ spec:
         image: bblacrrepo4321.azurecr.io/tsaoshane/shanegithup:#{Build.BuildId}#
         imagePullPolicy: Always
         ports:
-        - containerPort: 6001
-# service type loadbalancer       
+        - containerPort: 6001       
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"      #0.1 cpu
+          limits:
+            memory: "500Mi"
+            cpu: "200m"      #0.2 cpu
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-shane-declarative
+spec:
+  maxReplicas: 10 # define max replica count
+  minReplicas: 3  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-shane-deployment
+  targetCPUUtilizationPercentage: 80 # target CPU utilization   
+# service type ClusterIP       
 ---
 apiVersion: v1
 kind: Service
