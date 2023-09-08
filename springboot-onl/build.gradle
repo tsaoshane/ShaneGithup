@@ -1,7 +1,6 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'java'
-	id 'war'
 	id "com.palantir.docker" version "0.22.1"
 	//id "com.palantir.docker-run" version "0.22.1"
 }
@@ -10,7 +9,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.palantir.docker"
 
 group = 'bbsWs'
-version = '1.0'
 
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -28,15 +26,7 @@ repositories {
 }
 
 
-war {
-	archiveName = "bbsWs.war"
-	manifest {
-        attributes("Implementation-Vendor": 'Hyweb Global Technology Co., Ltd.',
-                   "Implementation-Title": 'Open Point Payment Gateway',
-                   "Implementation-Version": version,
-                   'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
-    }
-}
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'	
@@ -60,6 +50,18 @@ bootJar {
     launchScript()
 }
 
+/*
+
+war {
+	archiveName = "bbsWs.war"
+	manifest {
+        attributes("Implementation-Vendor": 'Hyweb Global Technology Co., Ltd.',
+                   "Implementation-Title": 'Open Point Payment Gateway',
+                   "Implementation-Version": version,
+                   'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
+    }
+}
+
 jar {
 	archiveName = "bbsWs.jar"
 	manifest {
@@ -72,7 +74,7 @@ jar {
     }
 }
 
-/*
+
 task createDockerFile(type: Dockerfile) {
     from 'openjdk:8-jre-alpine'
     copyFile jar.archiveFileName.get(), '/app/bbsWs.jar'
