@@ -71,7 +71,6 @@ metadata:
     appgw.ingress.kubernetes.io/health-probe-port: "6001"
     appgw.ingress.kubernetes.io/health-probe-path: "/getDocker"
     appgw.ingress.kubernetes.io/backend-path-prefix: "/"
-    #appgw.ingress.kubernetes.io/appgw-ssl-certificate: "ApplicationGatewayCertificate"
 spec:
   rules:
   - http:

@@ -42,7 +42,7 @@ public class NettyServerBoot {
 	
 	@PostConstruct
     public void start() throws InterruptedException {
-		
+		/*
 		try {
 			ChannelFuture future = serverBootstrap.bind(nettyProperties.getPort()).sync();
 	        socketAddress = future.channel().localAddress();
@@ -51,11 +51,12 @@ public class NettyServerBoot {
     		log.error("", t);
     		throw t;
     	}
+		*/
     }
 
     @PreDestroy
     public void close() {
-    	
+    	/*
     	try {
 	    	if(null != boosGroup && !boosGroup.isShutdown()) {
 	    		boosGroup.shutdownGracefully();
@@ -69,5 +70,6 @@ public class NettyServerBoot {
     	} finally {
     		log.info("Shutdown Netty Listen : {}", socketAddress.toString());
     	}
+		*/
     }
 }
